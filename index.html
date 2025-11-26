@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Date Plans</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-100 to-rose-200 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-4xl w-full bg-white rounded-2xl shadow-2xl p-6 md:p-8 fade-in">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-rose-600 mb-2">Choose Our Date Today!</h1>
+        <p class="text-center text-gray-600 mb-8">Pick a place and let's plan our perfect date!</p>
+
+        <div id="places" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <div class="place-card bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="Mega Mall">
+                <h3 class="text-xl font-semibold text-blue-800 mb-2">Mega Mall</h3>
+                <p class="text-blue-600">Shopping and fun time together!</p>
+            </div>
+
+            <div class="place-card bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="MOA">
+                <h3 class="text-xl font-semibold text-green-800 mb-2">Mall of Asia</h3>
+                <p class="text-green-600">Bay view and amazing food!</p>
+            </div>
+
+            <div class="place-card bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="Cubao">
+                <h3 class="text-xl font-semibold text-purple-800 mb-2">Cubao</h3>
+                <p class="text-purple-600">Vibrant streets and street food!</p>
+            </div>
+
+            <div class="place-card bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="BGC">
+                <h3 class="text-xl font-semibold text-yellow-800 mb-2">BGC</h3>
+                <p class="text-yellow-600">Modern city vibes!</p>
+            </div>
+
+            <div class="place-card bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="Intramuros">
+                <h3 class="text-xl font-semibold text-red-800 mb-2">Intramuros</h3>
+                <p class="text-red-600">Historic walls and romance!</p>
+            </div>
+
+            <div class="place-card bg-gradient-to-br from-teal-50 to-teal-100 border-2 border-teal-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="Pasig River">
+                <h3 class="text-xl font-semibold text-teal-800 mb-2">Pasig River</h3>
+                <p class="text-teal-600">Scenic views and fresh air!</p>
+            </div>
+        </div>
+
+        <div id="food-section" class="hidden fade-in">
+            <h2 class="text-2xl font-semibold text-center mb-4">Choose Your Food!</h2>
+            <div id="food-options" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"></div>
+        </div>
+
+        <div id="result" class="hidden fade-in">
+            <div class="bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl p-6 border-2 border-rose-200">
+                <h2 class="text-2xl font-bold text-center text-rose-600 mb-4">Our Perfect Date!</h2>
+                <div id="itinerary" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <button id="restart" class="hidden bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
+                Plan Another Date!
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center">
+            <h3 class="text-xl font-semibold mb-4">Are you sure?</h3>
+            <div class="flex gap-4 justify-center">
+                <button id="yes-btn" class="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2 rounded-full font-semibold">Yes!</button>
+                <button id="no-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-full font-semibold">Wait...</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>
