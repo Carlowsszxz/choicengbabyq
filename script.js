@@ -188,7 +188,7 @@ function showResult() {
             ).join('')}
         </div>
         <div class="text-center mt-6">
-            <p class="text-rose-600 font-semibold">Enjoy your perfect date! 💕</p>
+            <p class="text-rose-600 font-semibold">Enjoy your perfect date!</p>
         </div>
     `;
 }
