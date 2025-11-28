@@ -4,82 +4,181 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Date Plans</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
+    <link rel="icon" href="https://fonts.gstatic.com/s/e/notoemoji/latest/1f496/512.svg">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .romantic-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .heart {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            opacity: 0.15;
+            animation: float 8s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity: 0.15; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) scale(1.2); opacity: 0.1; }
+        }
+        .lobster {
+            font-family: 'Lobster', cursive;
+        }
+        .montserrat {
+            font-family: 'Montserrat', sans-serif;
+        }
+        body, .montserrat-base {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .hand-underline {
+            display: inline-block;
+            border-bottom: 2.5px solid #a78bfa;
+            border-radius: 2px;
+            width: auto;
+            padding-bottom: 2px;
+            margin-bottom: 2px;
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-pink-100 to-rose-200 min-h-screen flex items-center justify-center p-4">
-    <div class="max-w-4xl w-full bg-white rounded-2xl shadow-2xl p-6 md:p-8 fade-in">
-        <h1 class="text-3xl md:text-4xl font-bold text-center text-rose-600 mb-2">Choose Our Date Today!</h1>
-        <p class="text-center text-gray-600 mb-8">Pick a place and let's plan our perfect date!</p>
+<body class="bg-purple-50 min-h-screen flex flex-col items-center p-2 pt-6 relative overflow-x-hidden montserrat-base text-[17px]">
+    <!-- Minimalist: Removed animated background for a cleaner look -->
 
-        <div id="places" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-            <div class="place-card bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="Mega Mall">
-                <h3 class="text-xl font-semibold text-blue-800 mb-2">Mega Mall</h3>
-                <p class="text-blue-600">Shopping and fun time together!</p>
+    <div class="w-full max-w-md bg-white rounded-xl shadow p-2 sm:p-4 fade-in relative z-10 mt-2" style="box-shadow: 0 2px 12px 0 rgba(139, 92, 246, 0.08);">
+        <!-- Stepper -->
+        <div class="flex justify-center mb-3">
+            <div id="stepper" class="flex items-center gap-4">
+                <div class="flex flex-col items-center">
+                    <div id="step-1" class="w-8 h-8 flex items-center justify-center rounded-full bg-purple-400 text-white font-bold border-4 border-purple-200">1</div>
+                    <span class="text-xs mt-1 text-purple-500">Place</span>
+                </div>
+                <div class="w-8 h-1 bg-purple-200"></div>
+                <div class="flex flex-col items-center">
+                    <div id="step-2" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 font-bold border-4 border-gray-100">2</div>
+                    <span class="text-xs mt-1 text-gray-500">Food</span>
+                </div>
+                <div class="w-8 h-1 bg-purple-200"></div>
+                <div class="flex flex-col items-center">
+                    <div id="step-3" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 font-bold border-4 border-gray-100">3</div>
+                    <span class="text-xs mt-1 text-gray-500">Result</span>
+                </div>
             </div>
+        </div>
+        <h1 class="text-xl text-center text-purple-500 mb-2 lobster font-normal" aria-label="App Title">
+             <span class="hand-underline">Plan a Date! (in the end it's still you)</span>
+        </h1>
+        <p class="text-center text-purple-400 text-xs mb-2" aria-label="Instructions">Tap a place to start planning your date!</p>
+        <p class="text-center text-gray-500 mb-5 text-sm montserrat">Where do you want to go?</p>
 
-            <div class="place-card bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="MOA">
-                <h3 class="text-xl font-semibold text-green-800 mb-2">Mall of Asia</h3>
-                <p class="text-green-600">Bay view and amazing food!</p>
+        <div id="places" class="flex flex-col gap-2 mb-5 transition-all duration-500" aria-label="Place Choices">
+            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="Mega Mall" tabindex="0" aria-label="Mega Mall, Shopping and fun time together!">
+                <div class="text-xl">🏬</div>
+                <div>
+                    <h3 class="text-base font-normal text-purple-700">Mega Mall</h3>
+                    <p class="text-xs text-gray-400">Walks and TW!</p>
+                </div>
             </div>
-
-            <div class="place-card bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="Cubao">
-                <h3 class="text-xl font-semibold text-purple-800 mb-2">Cubao</h3>
-                <p class="text-purple-600">Vibrant streets and street food!</p>
+            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="MOA" tabindex="0" aria-label="Mall of Asia, Bay view and amazing food!">
+                <div class="text-xl">🌊</div>
+                <div>
+                    <h3 class="text-base font-normal text-purple-700">Mall of Asia</h3>
+                    <p class="text-xs text-gray-400">Bay view and walk date!</p>
+                </div>
             </div>
-
-            <div class="place-card bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="BGC">
-                <h3 class="text-xl font-semibold text-yellow-800 mb-2">BGC</h3>
-                <p class="text-yellow-600">Modern city vibes!</p>
+            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="Cubao" tabindex="0" aria-label="Cubao, Vibrant streets and street food!">
+                <div class="text-xl">🍢</div>
+                <div>
+                    <h3 class="text-base font-normal text-purple-700">Cubao</h3>
+                    <p class="text-xs text-gray-400">Art and City!</p>
+                </div>
             </div>
-
-            <div class="place-card bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="Intramuros">
-                <h3 class="text-xl font-semibold text-red-800 mb-2">Intramuros</h3>
-                <p class="text-red-600">Historic walls and romance!</p>
+            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="BGC" tabindex="0" aria-label="BGC, Modern city vibes!">
+                <div class="text-xl">🏙️</div>
+                <div>
+                    <h3 class="text-base font-normal text-purple-700">BGC</h3>
+                    <p class="text-xs text-gray-400">City Walks!</p>
+                </div>
             </div>
-
-            <div class="place-card bg-gradient-to-br from-teal-50 to-teal-100 border-2 border-teal-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105" data-place="Pasig River">
-                <h3 class="text-xl font-semibold text-teal-800 mb-2">Pasig River</h3>
-                <p class="text-teal-600">Scenic views and fresh air!</p>
+            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="Intramuros" tabindex="0" aria-label="Intramuros, Historic walls and romance!">
+                <div class="text-xl">🏰</div>
+                <div>
+                    <h3 class="text-base font-normal text-purple-700">Intramuros</h3>
+                    <p class="text-xs text-gray-400">Historic walls and romance!</p>
+                </div>
+            </div>
+            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="Pasig River" tabindex="0" aria-label="Pasig River, Scenic views and fresh air!">
+                <div class="text-xl">🚤</div>
+                <div>
+                    <h3 class="text-base font-normal text-purple-700">Pasig River</h3>
+                    <p class="text-xs text-gray-400">We talked about this that one time!</p>
+                </div>
             </div>
         </div>
 
-        <div id="food-section" class="hidden fade-in">
-            <h2 class="text-2xl font-semibold text-center mb-4">Choose Your Food!</h2>
-            <div id="food-options" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"></div>
-        </div>
-
-        <div id="result" class="hidden fade-in">
-            <div class="bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl p-6 border-2 border-rose-200">
-                <h2 class="text-2xl font-bold text-center text-rose-600 mb-4">Our Perfect Date!</h2>
-                <div id="itinerary" class="space-y-4"></div>
+        <div id="food-section" class="hidden fade-in transition-all duration-500">
+            <h2 class="text-base font-normal text-center mb-3 text-purple-700">Choose Your Food</h2>
+            <div id="food-options" class="grid grid-cols-1 gap-2 mb-4" aria-label="Food Choices"></div>
+            <div class="flex items-center gap-2 mt-2">
+                <input id="custom-food" type="text" placeholder="Type your own..." class="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-200 transition" />
+                <button id="add-food" class="bg-purple-400 hover:bg-purple-500 text-white rounded-lg px-4 py-2 text-sm transition focus:ring-2 focus:ring-purple-200">Add</button>
             </div>
         </div>
 
-        <div class="text-center mt-8">
-            <button id="restart" class="hidden bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-                Plan Another Date!
+        <div id="result" class="hidden fade-in transition-all duration-500">
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+                <h2 class="text-lg font-normal text-center text-purple-500 mb-3">Our Perfect Date</h2>
+                <div id="itinerary" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <button id="restart" class="hidden bg-purple-400 hover:bg-purple-500 text-white font-normal py-2 px-6 rounded-full shadow transition-all duration-200 focus:ring-2 focus:ring-purple-200 active:scale-97" aria-label="Plan Another Date">
+                Plan Again
             </button>
         </div>
     </div>
 
     <!-- Modal -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center">
-            <h3 class="text-xl font-semibold mb-4">Are you sure?</h3>
-            <div class="flex gap-4 justify-center">
-                <button id="yes-btn" class="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2 rounded-full font-semibold">Yes!</button>
-                <button id="no-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-full font-semibold">Wait...</button>
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-2 z-50">
+        <div class="bg-white rounded-2xl p-4 max-w-xs w-full text-center">
+            <h3 class="text-base font-semibold mb-3">Are you sure?</h3>
+            <div class="flex flex-col gap-2 justify-center">
+                <button id="yes-btn" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-full font-semibold">Yes!</button>
+                <button id="no-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-full font-semibold">Wait...</button>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="w-full text-center mt-6 text-purple-300 lobster text-sm z-10 relative px-2">
+        always our little adventure
+    </footer>
+
     <script>
         // Date Planner App
+        // Stepper update
+        function updateStepper(step) {
+            const steps = [
+                document.getElementById('step-1'),
+                document.getElementById('step-2'),
+                document.getElementById('step-3')
+            ];
+            steps.forEach((el, idx) => {
+                if (idx < step) {
+                    el.classList.remove('bg-gray-200', 'text-gray-500', 'border-gray-100');
+                    el.classList.add('bg-purple-400', 'text-white', 'border-purple-200');
+                } else {
+                    el.classList.remove('bg-purple-400', 'text-white', 'border-purple-200');
+                    el.classList.add('bg-gray-200', 'text-gray-500', 'border-gray-100');
+                }
+            });
+        }
         const places = document.querySelectorAll('.place-card');
         const foodSection = document.getElementById('food-section');
         const foodOptions = document.getElementById('food-options');
@@ -196,21 +295,41 @@
         function selectPlace(placeElement) {
             selectedPlace = placeElement.dataset.place;
             currentStep = 'food';
+            updateStepper(2);
             showModal();
         }
 
         // Show food options
         function showFoodOptions() {
+            updateStepper(2);
             const foods = foodData[selectedPlace];
             foodOptions.innerHTML = '';
 
             foods.forEach(food => {
                 const foodCard = document.createElement('div');
-                foodCard.className = 'food-card bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-200 rounded-xl p-4 cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105';
-                foodCard.innerHTML = `<div class="text-center"><div class="text-2xl mb-2">${food}</div></div>`;
+                foodCard.className = 'food-card bg-white border border-gray-200 rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97';
+                foodCard.innerHTML = `<div class="text-center"><div class="text-base mb-1 text-purple-700">${food}</div>`;
                 foodCard.addEventListener('click', () => selectFood(food));
                 foodOptions.appendChild(foodCard);
             });
+
+            // Minimalist input for custom food
+            setTimeout(() => {
+                const addBtn = document.getElementById('add-food');
+                const customInput = document.getElementById('custom-food');
+                if (addBtn && customInput) {
+                    addBtn.onclick = () => {
+                        const val = customInput.value.trim();
+                        if (val) selectFood(val);
+                    };
+                    customInput.onkeydown = (e) => {
+                        if (e.key === 'Enter') {
+                            const val = customInput.value.trim();
+                            if (val) selectFood(val);
+                        }
+                    };
+                }
+            }, 0);
 
             document.getElementById('places').classList.add('hidden');
             foodSection.classList.remove('hidden');
@@ -220,6 +339,7 @@
         function selectFood(food) {
             selectedFood = food;
             currentStep = 'confirm';
+            updateStepper(3);
             showModal();
         }
 
@@ -248,28 +368,29 @@
 
         // Show final result
         function showResult() {
+            updateStepper(3);
             foodSection.classList.add('hidden');
             result.classList.remove('hidden');
             restartBtn.classList.remove('hidden');
 
             const itineraryData = itineraries[selectedPlace];
             itinerary.innerHTML = `
-                <div class="text-center mb-6">
-                    <h3 class="text-2xl font-bold text-rose-600 mb-2">${itineraryData.title}</h3>
-                    <p class="text-lg text-gray-700">Food choice: <strong>${selectedFood}</strong></p>
+                <div class="text-center mb-4 sm:mb-6">
+                    <h3 class="text-xl sm:text-2xl font-bold text-purple-600 mb-1 sm:mb-2">${itineraryData.title}</h3>
+                    <p class="text-base sm:text-lg text-gray-700">Food choice: <strong>${selectedFood}</strong></p>
                 </div>
-                <div class="space-y-3">
+                <div class="space-y-2 sm:space-y-3">
                     ${itineraryData.steps.map((step, index) =>
-                        `<div class="bg-white rounded-lg p-4 shadow-md border-l-4 border-rose-400">
+                        `<div class="bg-white rounded-lg p-3 sm:p-4 shadow-md border-l-4 border-purple-400">
                             <div class="flex items-center">
-                                <span class="bg-rose-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">${index + 1}</span>
+                                <span class="bg-purple-500 text-white rounded-full w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-xs sm:text-sm font-bold mr-2 sm:mr-3">${index + 1}</span>
                                 <span class="text-gray-800">${step}</span>
                             </div>
                         </div>`
                     ).join('')}
                 </div>
-                <div class="text-center mt-6">
-                    <p class="text-rose-600 font-semibold">Enjoy your perfect date!</p>
+                <div class="text-center mt-4 sm:mt-6">
+                    <p class="text-purple-600 font-semibold">Enjoy!</p>
                 </div>
             `;
         }
@@ -279,20 +400,22 @@
             selectedPlace = '';
             selectedFood = '';
             currentStep = 'place';
-
+            updateStepper(1);
             document.getElementById('places').classList.remove('hidden');
             foodSection.classList.add('hidden');
             result.classList.add('hidden');
             restartBtn.classList.add('hidden');
-
             // Clear selections
             document.querySelectorAll('.place-card, .food-card').forEach(card => {
-                card.classList.remove('ring-4', 'ring-rose-400');
+                card.classList.remove('ring-4', 'ring-purple-400');
             });
         }
 
         // Start the app
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStepper(1);
+            init();
+        });
     </script>
 </body>
 </html>
