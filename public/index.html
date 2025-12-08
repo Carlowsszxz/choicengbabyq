@@ -3,11 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plan the perfect date with our interactive date planner. Choose from amazing places and food options.">
     <title>Our Date Plans</title>
     <link rel="icon" href="https://fonts.gstatic.com/s/e/notoemoji/latest/1f496/512.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* Performance: Use will-change sparingly */
+        .carousel-wrapper {
+            will-change: transform;
+        }
+        
+        /* Accessibility: Reduce motion for users who prefer it */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .romantic-bg {
@@ -45,79 +62,275 @@
             padding-bottom: 2px;
             margin-bottom: 2px;
         }
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .carousel-wrapper {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .carousel-slide {
+            min-width: 100%;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .place-carousel-card {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            cursor: grab;
+            user-select: none;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 16px;
+            padding: 12px;
+            margin: 0 auto;
+        }
+        .place-carousel-card:active {
+            cursor: grabbing;
+        }
+        .place-carousel-card:hover {
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.12);
+            border-color: #c4b5fd;
+        }
+        .carousel-image {
+            width: 100px;
+            min-width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #e9d5ff 0%, #f3e8ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+        }
+        /* Lazy load placeholder */
+        .carousel-image.loading {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .carousel-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 50%);
+        }
+        .carousel-content {
+            text-align: left;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .carousel-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #6d28d9;
+            margin-bottom: 4px;
+        }
+        .carousel-description {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 12px;
+        }
+        .carousel-select-btn {
+            background: linear-gradient(135deg, #a78bfa 0%, #9f7aea 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+            align-self: flex-start;
+        }
+        .carousel-select-btn:hover {
+            background: linear-gradient(135deg, #9f7aea 0%, #9333ea 100%);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            transform: translateY(-2px);
+        }
+        .carousel-select-btn:active {
+            transform: scale(0.97);
+        }
+        .carousel-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .carousel-button {
+            background: linear-gradient(135deg, #a78bfa 0%, #9f7aea 100%);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+        }
+        .carousel-button:hover {
+            background: linear-gradient(135deg, #9f7aea 0%, #8b5cf6 100%);
+            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35);
+            transform: translateY(-2px);
+        }
+        .carousel-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+        }
+        .carousel-indicator {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e9d5ff;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .carousel-dot.active {
+            background: #a78bfa;
+            width: 24px;
+            border-radius: 4px;
+            box-shadow: 0 0 12px rgba(167, 139, 250, 0.5);
+        }
+        @media (max-width: 640px) {
+            .carousel-controls {
+                gap: 12px;
+            }
+            .carousel-button {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
-<body class="bg-purple-50 min-h-screen flex flex-col items-center p-2 pt-6 relative overflow-x-hidden montserrat-base text-[17px]">
+<body class="bg-purple-50 h-screen flex flex-col items-center justify-center p-2 relative overflow-x-hidden montserrat-base text-[17px]">
     <!-- Minimalist: Removed animated background for a cleaner look -->
 
-    <div class="w-full max-w-md bg-white rounded-xl shadow p-2 sm:p-4 fade-in relative z-10 mt-2" style="box-shadow: 0 2px 12px 0 rgba(139, 92, 246, 0.08);">
+    <div class="w-full max-w-md sm:max-w-2xl bg-white rounded-xl shadow p-3 sm:p-6 md:p-8 fade-in relative z-10 flex flex-col max-h-screen overflow-y-auto" style="box-shadow: 0 2px 12px 0 rgba(139, 92, 246, 0.08);">
         <!-- Stepper -->
-        <div class="flex justify-center mb-3">
-            <div id="stepper" class="flex items-center gap-4">
-                <div class="flex flex-col items-center">
-                    <div id="step-1" class="w-8 h-8 flex items-center justify-center rounded-full bg-purple-400 text-white font-bold border-4 border-purple-200">1</div>
+        <div class="flex justify-center mb-2 sm:mb-4">
+            <div id="stepper" class="flex items-center gap-2 sm:gap-4">
+                <div id="step-wrapper-1" class="flex flex-col items-center p-3 rounded-xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 transition-all duration-300">
+                    <div id="step-1" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-purple-400 text-white font-bold border-4 border-purple-200 text-xs sm:text-base shadow-md ring-2 ring-pink-200">1</div>
                     <span class="text-xs mt-1 text-purple-500">Place</span>
                 </div>
-                <div class="w-8 h-1 bg-purple-200"></div>
-                <div class="flex flex-col items-center">
-                    <div id="step-2" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 font-bold border-4 border-gray-100">2</div>
+                <div class="w-6 sm:w-6 h-1 bg-purple-200"></div>
+                <div id="step-wrapper-2" class="flex flex-col items-center p-3 rounded-xl border-2 border-gray-200 bg-gray-50 transition-all duration-300">
+                    <div id="step-2" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 font-bold border-4 border-gray-100 text-xs sm:text-base">2</div>
                     <span class="text-xs mt-1 text-gray-500">Food</span>
                 </div>
-                <div class="w-8 h-1 bg-purple-200"></div>
-                <div class="flex flex-col items-center">
-                    <div id="step-3" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 font-bold border-4 border-gray-100">3</div>
+                <div class="w-6 sm:w-6 h-1 bg-purple-200"></div>
+                <div id="step-wrapper-3" class="flex flex-col items-center p-3 rounded-xl border-2 border-gray-200 bg-gray-50 transition-all duration-300">
+                    <div id="step-3" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 font-bold border-4 border-gray-100 text-xs sm:text-base">3</div>
                     <span class="text-xs mt-1 text-gray-500">Result</span>
                 </div>
             </div>
         </div>
-        <h1 class="text-xl text-center text-purple-500 mb-2 lobster font-normal" aria-label="App Title">
+        <h1 class="text-xl sm:text-xl text-center text-purple-500 mb-2 sm:mb-2 lobster font-normal" aria-label="App Title">
              <span class="hand-underline">Plan a Date! (in the end it's still you)</span>
         </h1>
-        <p class="text-center text-purple-400 text-xs mb-2" aria-label="Instructions">Tap a place to start planning your date!</p>
-        <p class="text-center text-gray-500 mb-5 text-sm montserrat">Where do you want to go?</p>
+        <p class="text-center text-purple-400 text-xs sm:text-xs mb-1 sm:mb-2" aria-label="Instructions">Tap a place to start planning our date!</p>
+        <p class="text-center text-gray-500 mb-4 sm:mb-5 text-sm sm:text-sm montserrat">Where do you want to go?</p>
 
-        <div id="places" class="flex flex-col gap-2 mb-5 transition-all duration-500" aria-label="Place Choices">
-            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="Mega Mall" tabindex="0" aria-label="Mega Mall, Shopping and fun time together!">
-                <div class="text-xl"></div>
-                <div>
-                    <h3 class="text-base font-normal text-purple-700">Mega Mall</h3>
-                    <p class="text-xs text-gray-400">Walks and TW!</p>
+        <div id="places" class="carousel-container mb-6 sm:mb-5 flex-1" aria-label="Place Choices Carousel">
+            <div class="carousel-wrapper" id="carousel-wrapper">
+                <!-- Carousel slides will be generated by JavaScript -->
+                <div class="carousel-slide">
+                    <div class="place-carousel-card" data-place="Mega Mall" tabindex="0">
+                        <div class="carousel-image" style="background-image: url('../images/megamall.png'); background-size: cover; background-position: center;"></div>
+                        <div class="carousel-content">
+                            <div class="carousel-title">Mega Mall</div>
+                            <div class="carousel-description">Walks and TW!</div>
+                            <button class="carousel-select-btn" data-place="Mega Mall">Select</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <div class="place-carousel-card" data-place="MOA" tabindex="0">
+                        <div class="carousel-image" style="background-image: url('../images/moa.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="carousel-content">
+                            <div class="carousel-title">Mall of Asia</div>
+                            <div class="carousel-description">Bay view and walk date!</div>
+                            <button class="carousel-select-btn" data-place="MOA">Select</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <div class="place-carousel-card" data-place="Cubao" tabindex="0">
+                        <div class="carousel-image" style="background-image: url('../images/cubao.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="carousel-content">
+                            <div class="carousel-title">Cubao</div>
+                            <div class="carousel-description">Art and City!</div>
+                            <button class="carousel-select-btn" data-place="Cubao">Select</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <div class="place-carousel-card" data-place="BGC" tabindex="0">
+                        <div class="carousel-image" style="background-image: url('../images/bgc.webp'); background-size: cover; background-position: center;"></div>
+                        <div class="carousel-content">
+                            <div class="carousel-title">BGC</div>
+                            <div class="carousel-description">City Walks!</div>
+                            <button class="carousel-select-btn" data-place="BGC">Select</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <div class="place-carousel-card" data-place="Intramuros" tabindex="0">
+                        <div class="carousel-image" style="background-image: url('../images/intramuros.webp'); background-size: cover; background-position: center;"></div>
+                        <div class="carousel-content">
+                            <div class="carousel-title">Intramuros</div>
+                            <div class="carousel-description">We've never been here before!</div>
+                            <button class="carousel-select-btn" data-place="Intramuros">Select</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <div class="place-carousel-card" data-place="Pasig River" tabindex="0">
+                        <div class="carousel-image" style="background-image: url('../images/pasig river.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="carousel-content">
+                            <div class="carousel-title">Pasig River</div>
+                            <div class="carousel-description">We talked about this that one time!</div>
+                            <button class="carousel-select-btn" data-place="Pasig River">Select</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="MOA" tabindex="0" aria-label="Mall of Asia, Bay view and amazing food!">
-                <div class="text-xl"></div>
-                <div>
-                    <h3 class="text-base font-normal text-purple-700">Mall of Asia</h3>
-                    <p class="text-xs text-gray-400">Bay view and walk date!</p>
-                </div>
-            </div>
-            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="Cubao" tabindex="0" aria-label="Cubao, Vibrant streets and street food!">
-                <div class="text-xl"></div>
-                <div>
-                    <h3 class="text-base font-normal text-purple-700">Cubao</h3>
-                    <p class="text-xs text-gray-400">Art and City!</p>
-                </div>
-            </div>
-            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="BGC" tabindex="0" aria-label="BGC, Modern city vibes!">
-                <div class="text-xl"></div>
-                <div>
-                    <h3 class="text-base font-normal text-purple-700">BGC</h3>
-                    <p class="text-xs text-gray-400">City Walks!</p>
-                </div>
-            </div>
-            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="Intramuros" tabindex="0" aria-label="Intramuros, Historic walls and romance!">
-                <div class="text-xl"></div>
-                <div>
-                    <h3 class="text-base font-normal text-purple-700">Intramuros</h3>
-                    <p class="text-xs text-gray-400">Historic walls and romance!</p>
-                </div>
-            </div>
-            <div class="place-card flex items-center gap-3 bg-white rounded-lg p-3 cursor-pointer hover:bg-purple-50 hover:shadow transition-all duration-150 active:scale-97 border border-transparent" data-place="Pasig River" tabindex="0" aria-label="Pasig River, Scenic views and fresh air!">
-                <div class="text-xl"></div>
-                <div>
-                    <h3 class="text-base font-normal text-purple-700">Pasig River</h3>
-                    <p class="text-xs text-gray-400">We talked about this that one time!</p>
-                </div>
+
+            <!-- Carousel Controls -->
+            <div class="carousel-controls">
+                <div class="carousel-indicator" id="carousel-indicator"><div class="carousel-dot active"></div><div class="carousel-dot "></div><div class="carousel-dot "></div><div class="carousel-dot "></div><div class="carousel-dot "></div><div class="carousel-dot "></div></div>
             </div>
         </div>
 
@@ -125,19 +338,26 @@
             <h2 class="text-base font-normal text-center mb-3 text-purple-700">Choose Your Food</h2>
             <div id="food-options" class="grid grid-cols-1 gap-2 mb-4" aria-label="Food Choices"></div>
             <div class="flex items-center gap-2 mt-2">
-                <input id="custom-food" type="text" placeholder="Type your own..." class="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-200 transition" />
+                <input id="custom-food" type="text" placeholder="Type your own..." class="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-200 transition">
                 <button id="add-food" class="bg-purple-400 hover:bg-purple-500 text-white rounded-lg px-4 py-2 text-sm transition focus:ring-2 focus:ring-purple-200">Add</button>
             </div>
         </div>
 
         <div id="result" class="hidden fade-in transition-all duration-500">
-            <div class="bg-white rounded-lg p-4 shadow-sm">
-                <h2 class="text-lg font-normal text-center text-purple-500 mb-3">Our Perfect Date</h2>
+            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 shadow-lg border border-purple-100">
+                <div class="flex items-center justify-between mb-6 gap-2">
+                    <h2 class="text-2xl font-bold text-center flex-1 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">Our Date for Today</h2>
+                    <button id="copy-plan" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 shadow-md active:scale-95 flex items-center gap-2" title="Copy plan to clipboard">
+                       
+                        <span>Copy</span>
+                    </button>
+                </div>
                 <div id="itinerary" class="space-y-3"></div>
+                <div id="copy-feedback" class="hidden mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-sm text-center font-medium animate-pulse">✓ Copied to clipboard!</div>
             </div>
         </div>
 
-        <div class="text-center mt-5">
+        <div class="text-center mt-5 sm:mt-4">
             <button id="restart" class="hidden bg-purple-400 hover:bg-purple-500 text-white font-normal py-2 px-6 rounded-full shadow transition-all duration-200 focus:ring-2 focus:ring-purple-200 active:scale-97" aria-label="Plan Another Date">
                 Plan Again
             </button>
@@ -146,40 +366,172 @@
 
     <!-- Modal -->
     <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-2 z-50">
-        <div class="bg-white rounded-2xl p-4 max-w-xs w-full text-center">
-            <h3 class="text-base font-semibold mb-3">Are you sure?</h3>
+        <div class="bg-white rounded-2xl p-4 max-w-xs w-full text-center shadow-lg">
+            <h3 class="text-base font-semibold mb-3 text-purple-700">Are you sure?</h3>
             <div class="flex flex-col gap-2 justify-center">
-                <button id="yes-btn" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-full font-semibold">Yes!</button>
-                <button id="no-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-full font-semibold">Wait...</button>
+                <button id="yes-btn" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-full font-semibold transition-all duration-200 active:scale-95">Yes!</button>
+                <button id="no-btn" class="bg-purple-200 hover:bg-purple-300 text-purple-700 px-4 py-2 rounded-full font-semibold transition-all duration-200 active:scale-95">Wait...</button>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
     <footer class="w-full text-center mt-6 text-purple-300 lobster text-sm z-10 relative px-2">
-        luv u
+        made with love
     </footer>
 
     <script>
         // Date Planner App
+        // Carousel Implementation with Performance Optimizations
+        class PlaceCarousel {
+            constructor() {
+                this.currentIndex = 0;
+                this.totalSlides = 6;
+                this.wrapper = document.getElementById('carousel-wrapper');
+                this.indicator = document.getElementById('carousel-indicator');
+                this.isDragging = false;
+                this.startX = 0;
+                this.currentX = 0;
+                this.offsetX = 0;
+                this.minSwipeDistance = 50;
+                this.throttleTimer = null;
+
+                this.init();
+                this.preloadImages();
+            }
+
+            preloadImages() {
+                // Preload adjacent slide images for smooth transitions
+                const images = document.querySelectorAll('.carousel-image');
+                images.forEach((img, idx) => {
+                    if (Math.abs(idx - this.currentIndex) <= 1) {
+                        const bgImage = img.style.backgroundImage;
+                        if (bgImage) {
+                            const url = bgImage.replace(/url\(["']?([^"']*)["']?\)/, '$1');
+                            const tempImg = new Image();
+                            tempImg.src = url;
+                        }
+                    }
+                });
+            }
+
+            init() {
+                // Initialize indicator dots
+                this.updateIndicator();
+
+                // Touch/Mouse drag listeners with passive support
+                this.wrapper.addEventListener('mousedown', (e) => this.onDragStart(e));
+                this.wrapper.addEventListener('touchstart', (e) => this.onDragStart(e));
+                
+                this.wrapper.addEventListener('mousemove', (e) => this.onDragMove(e));
+                this.wrapper.addEventListener('touchmove', (e) => this.onDragMove(e), { passive: true });
+
+                this.wrapper.addEventListener('mouseup', (e) => this.onDragEnd(e));
+                this.wrapper.addEventListener('mouseleave', (e) => this.onDragEnd(e));
+                this.wrapper.addEventListener('touchend', (e) => this.onDragEnd(e));
+
+                // Keyboard navigation with focus trap
+                document.addEventListener('keydown', (e) => {
+                    if (!document.getElementById('places').classList.contains('hidden')) {
+                        if (e.key === 'ArrowLeft') {
+                            e.preventDefault();
+                            this.prev();
+                        }
+                        if (e.key === 'ArrowRight') {
+                            e.preventDefault();
+                            this.next();
+                        }
+                    }
+                });
+            }
+
+            onDragStart(e) {
+                this.isDragging = true;
+                this.startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                this.offsetX = this.currentIndex * -100;
+                this.wrapper.style.transition = 'none';
+            }
+
+            onDragMove(e) {
+                if (!this.isDragging) return;
+                
+                e.preventDefault();
+                const currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                const diff = currentX - this.startX;
+                const percent = (diff / this.wrapper.parentElement.offsetWidth) * 100;
+                
+                this.wrapper.style.transform = `translateX(${this.offsetX + percent}%)`;
+            }
+
+            onDragEnd(e) {
+                if (!this.isDragging) return;
+                
+                this.isDragging = false;
+                const currentX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+                const diff = currentX - this.startX;
+                
+                this.wrapper.style.transition = '';
+                
+                if (Math.abs(diff) > this.minSwipeDistance) {
+                    if (diff > 0) {
+                        this.prev();
+                    } else {
+                        this.next();
+                    }
+                } else {
+                    this.updatePosition();
+                }
+            }
+
+            prev() {
+                if (this.currentIndex > 0) {
+                    this.currentIndex--;
+                    this.updatePosition();
+                }
+            }
+
+            next() {
+                if (this.currentIndex < this.totalSlides - 1) {
+                    this.currentIndex++;
+                    this.updatePosition();
+                }
+            }
+
+            updatePosition() {
+                this.wrapper.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+                this.updateIndicator();
+            }
+
+            updateIndicator() {
+                const dots = this.indicator.querySelectorAll('.carousel-dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.currentIndex);
+                });
+            }
+        }
+
         // Stepper update
         function updateStepper(step) {
             const steps = [
-                document.getElementById('step-1'),
-                document.getElementById('step-2'),
-                document.getElementById('step-3')
+                { circle: document.getElementById('step-1'), wrapper: document.getElementById('step-wrapper-1') },
+                { circle: document.getElementById('step-2'), wrapper: document.getElementById('step-wrapper-2') },
+                { circle: document.getElementById('step-3'), wrapper: document.getElementById('step-wrapper-3') }
             ];
             steps.forEach((el, idx) => {
                 if (idx < step) {
-                    el.classList.remove('bg-gray-200', 'text-gray-500', 'border-gray-100');
-                    el.classList.add('bg-purple-400', 'text-white', 'border-purple-200');
+                    el.circle.classList.remove('bg-gray-200', 'text-gray-500', 'border-gray-100');
+                    el.circle.classList.add('bg-purple-400', 'text-white', 'border-purple-200');
+                    el.wrapper.classList.remove('border-gray-200', 'bg-gray-50');
+                    el.wrapper.classList.add('border-purple-200', 'bg-gradient-to-br', 'from-purple-50', 'to-pink-50');
                 } else {
-                    el.classList.remove('bg-purple-400', 'text-white', 'border-purple-200');
-                    el.classList.add('bg-gray-200', 'text-gray-500', 'border-gray-100');
+                    el.circle.classList.remove('bg-purple-400', 'text-white', 'border-purple-200');
+                    el.circle.classList.add('bg-gray-200', 'text-gray-500', 'border-gray-100');
+                    el.wrapper.classList.remove('border-purple-200', 'bg-gradient-to-br', 'from-purple-50', 'to-pink-50');
+                    el.wrapper.classList.add('border-gray-200', 'bg-gray-50');
                 }
             });
         }
-        const places = document.querySelectorAll('.place-card');
+
         const foodSection = document.getElementById('food-section');
         const foodOptions = document.getElementById('food-options');
         const result = document.getElementById('result');
@@ -192,6 +544,7 @@
         let selectedPlace = '';
         let selectedFood = '';
         let currentStep = 'place'; // 'place' or 'food'
+        let carousel = null;
 
         // Food options for each place
         const foodData = {
@@ -206,28 +559,27 @@
         // Itinerary data
         const itineraries = {
             "Mega Mall": {
-                title: "Mega Mall Adventure!",
+                title: "Mega Mall!",
                 steps: [
                     "Take jeepney/UV Express from Antipolo to Mega Mall (1-1.5 hours)",
                     "Shop and explore the mall together",
-                    "Enjoy delicious food at your chosen restaurant",
-                    "Watch a movie or play arcade games",
-                    "Return home with happy memories!"
+                    "Eat food at your chosen restaurant",
+                    "Play arcade gameszz",
+                    "Walksss!"
                 ]
             },
             "MOA": {
-                title: "Mall of Asia Date!",
+                title: "Mall of Asia!",
                 steps: [
-                    "UV Express to Ayala, then bus/MRT to MOA (1.5-2 hours)",
+                    "UV Express to Ayala, then bus to MOA (1.5-2 hours)",
                     "Walk along the bay and enjoy the view",
-                    "Shop at amazing stores",
-                    "Dine at your favorite restaurant",
+                    "Eat fud at my babys chosen resto",
                     "Try rides or enjoy the evening lights",
                     "Head back home with beautiful memories!"
                 ]
             },
             "Cubao": {
-                title: "Cubao Exploration!",
+                title: "Cubao!",
                 steps: [
                     "Jeepney/UV Express to Cubao via Marcos Highway (1-1.5 hours)",
                     "Explore the vibrant shops and markets",
@@ -238,7 +590,7 @@
                 ]
             },
             "BGC": {
-                title: "BGC Modern Date!",
+                title: "BGC!",
                 steps: [
                     "Jeepney or UV Express to Ayala (1 hour)",
                     "Short walk to BGC",
@@ -249,7 +601,7 @@
                 ]
             },
             "Intramuros": {
-                title: "Historic Intramuros!",
+                title: "Intramuros!",
                 steps: [
                     "Bus to Masinag, then LRT to Recto (1.5 hours)",
                     "LRT transfer to UN Ave Station",
@@ -261,22 +613,29 @@
                 ]
             },
             "Pasig River": {
-                title: "Scenic River Date!",
+                title: "Pasig River Esplanade!",
                 steps: [
                     "Jeepney or UV Express to Ayala (1 hour)",
                     "Take Pasig River Ferry to Escolta",
                     "Walk along the scenic river esplanade",
                     "Enjoy riverside dining",
                     "Relax and enjoy the view",
-                    "Return via ferry and transport home"
+                    "Return via ferry or LRT and transport home"
                 ]
             }
         };
 
         // Initialize app
         function init() {
-            places.forEach(place => {
-                place.addEventListener('click', () => selectPlace(place));
+            // Initialize carousel
+            carousel = new PlaceCarousel();
+
+            // Add listeners to all select buttons
+            document.querySelectorAll('.carousel-select-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const place = e.target.dataset.place;
+                    selectPlace(place);
+                });
             });
 
             restartBtn.addEventListener('click', resetApp);
@@ -292,10 +651,9 @@
         }
 
         // Select a place
-        function selectPlace(placeElement) {
-            selectedPlace = placeElement.dataset.place;
+        function selectPlace(placeName) {
+            selectedPlace = placeName;
             currentStep = 'food';
-            updateStepper(2);
             showModal();
         }
 
@@ -339,7 +697,6 @@
         function selectFood(food) {
             selectedFood = food;
             currentStep = 'confirm';
-            updateStepper(3);
             showModal();
         }
 
@@ -360,8 +717,10 @@
             hideModal();
 
             if (currentStep === 'food') {
+                updateStepper(2);
                 showFoodOptions();
             } else if (currentStep === 'confirm') {
+                updateStepper(3);
                 showResult();
             }
         }
@@ -375,24 +734,43 @@
 
             const itineraryData = itineraries[selectedPlace];
             itinerary.innerHTML = `
-                <div class="text-center mb-4 sm:mb-6">
-                    <h3 class="text-xl sm:text-2xl font-bold text-purple-600 mb-1 sm:mb-2">${itineraryData.title}</h3>
-                    <p class="text-base sm:text-lg text-gray-700">Food choice: <strong>${selectedFood}</strong></p>
+                <div class="text-center mb-6 p-4 bg-white rounded-xl border border-purple-200">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-2">${itineraryData.title}</h3>
+                    <p class="text-sm sm:text-base text-gray-600">Food: <span class="font-bold text-purple-600">${selectedFood}</span></p>
                 </div>
-                <div class="space-y-2 sm:space-y-3">
+                <div class="space-y-3 sm:space-y-4">
                     ${itineraryData.steps.map((step, index) =>
-                        `<div class="bg-white rounded-lg p-3 sm:p-4 shadow-md border-l-4 border-purple-400">
-                            <div class="flex items-center">
-                                <span class="bg-purple-500 text-white rounded-full w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-xs sm:text-sm font-bold mr-2 sm:mr-3">${index + 1}</span>
-                                <span class="text-gray-800">${step}</span>
+                        `<div class="bg-white rounded-xl p-4 sm:p-5 shadow-md border-l-4 border-gradient-to-b from-purple-400 to-pink-400 hover:shadow-lg transition-all duration-200 hover:translate-x-1">
+                            <div class="flex items-start gap-3">
+                                <span class="flex-shrink-0 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-full w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-xs sm:text-sm font-bold">${index + 1}</span>
+                                <span class="text-gray-800 text-sm sm:text-base leading-relaxed">${step}</span>
                             </div>
                         </div>`
                     ).join('')}
                 </div>
-                <div class="text-center mt-4 sm:mt-6">
-                    <p class="text-purple-600 font-semibold">Enjoy!</p>
+                <div class="text-center mt-6 p-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl border border-purple-200">
+                    <p class="text-purple-700 font-semibold text-lg">Take Care!</p>
                 </div>
             `;
+            
+            // Setup copy button
+            document.getElementById('copy-plan').addEventListener('click', copyPlanToClipboard);
+        }
+        
+        // Copy plan to clipboard
+        function copyPlanToClipboard() {
+            const itineraryData = itineraries[selectedPlace];
+            const planText = `${itineraryData.title}\n\nFood: ${selectedFood}\n\n${itineraryData.steps.map((step, i) => `${i + 1}. ${step}`).join('\n')}\n\nHave a wonderful time together! 💕`;
+            
+            navigator.clipboard.writeText(planText).then(() => {
+                const feedback = document.getElementById('copy-feedback');
+                feedback.classList.remove('hidden');
+                setTimeout(() => {
+                    feedback.classList.add('hidden');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
         }
 
         // Reset the app
@@ -405,10 +783,11 @@
             foodSection.classList.add('hidden');
             result.classList.add('hidden');
             restartBtn.classList.add('hidden');
-            // Clear selections
-            document.querySelectorAll('.place-card, .food-card').forEach(card => {
-                card.classList.remove('ring-4', 'ring-purple-400');
-            });
+            // Reset carousel to first slide
+            if (carousel) {
+                carousel.currentIndex = 0;
+                carousel.updatePosition();
+            }
         }
 
         // Start the app
